@@ -1,4 +1,4 @@
-Word {
+RTWord {
   input = item+
   item =
     | space -- space
@@ -9,11 +9,14 @@ Word {
   word = legalchar+
   legalchar = ~separator ~space any
 
-  separator = "(" | ")" | "//" | extraSeparator
+  separator = "(" | ")" | "//"
   comment = "//" (~"\n" any)* "\n"
   space += comment
   string = dq (~dq any)* dq
   dq = "\""
 
-  extraSeparator = ";" | ":" | "{" | "}" | "->" | ","
+}
+
+Word <: RTWord {
+  separator += ";" | ":" | "{" | "}" | "->" | ","
 }

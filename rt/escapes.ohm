@@ -2,7 +2,8 @@ Escapes {
   text = char+
   char =
     | dq (~dq stringchar)* dq -- string
-    | ";" (~nl stringchar)* nl -- comment
+    | "//" (~nl stringchar)* nl -- comment
+    | "❲" wordchar+ "❳" -- word
     | any -- any
 
   stringchar =
@@ -13,9 +14,12 @@ Escapes {
     | ">" -- gt
     | "&" -- amp
     | dq -- quot
-    | "'" -- squote
     | any -- any
 
+  wordchar =
+    | "❲" wordchar+ "❳" -- rec
+    | any -- bottom
+    
   dq = "\""
   nl = "\n"
 }
