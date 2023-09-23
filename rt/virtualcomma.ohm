@@ -1,13 +1,14 @@
 VirtualComma {
-  input = char+
-  char =
+  input = item+
+  item =
     | space -- space
     | separator -- separator
     | any &space -- needsVcomma
     | any &separator -- needsVcommaSeparator
     | any -- any
-  // separator = "(" | ")" | "'" | "\"" | "," | "@" | "`" | ";" | " . "
-  separator = "(" | ")" | "'" | "\"" | "," | "`" | ";" | " . "
-  semiColonComment = ";" (~"\n" any)* "\n"
-  space += semiColonComment
+  separator = "(" | ")" | "//" | higherLevelSeparator
+  comment = "//" (~"\n" any)* "\n"
+  space += comment
+
+  higherLevelSeparator = ";" | ":" | "{" | "}" | "->"
 }

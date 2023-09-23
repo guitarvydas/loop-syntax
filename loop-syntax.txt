@@ -1,6 +1,7 @@
+// this is a comment
 loop over operands -> operand {
     termination: operands empty;
     iteration: 
-      do-something1-with (operand); 
+      do-something1-with (operand);
       do-something2-with (operand);
   }

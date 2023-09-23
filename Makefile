@@ -4,6 +4,4 @@ all: dev
 
 dev: 
 	rm -f transpiler
-	odin run . $(ODIN_FLAGS) >out/gen.js
-	cat js/support.js out/gen.js >out/pl.js
-	node out/pl.js
+	odin run . $(ODIN_FLAGS)

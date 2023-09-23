@@ -10,7 +10,7 @@ vcomma = "ₓ",
     char_needsVcommaSeparator: function (c, lookahead) { return c.rwr () + vcomma; },
     char_any: function (c) { return c.rwr () },
     separator: function (c) { return c.rwr () },
-    semiColonComment: function (semicolon, cs, nl) { return semicolon.rwr () + cs.rwr ().join ('') + nl.rwr (); },
+    comment: function (kcomment, cs, nl) { return kcomment.rwr () + cs.rwr ().join ('') + nl.rwr (); },
 
     _terminal: function() { return this.sourceString; },
     _iter: function (...children) { return children.map(c => c.rwr ()); }

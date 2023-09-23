@@ -982,24 +982,6 @@ concat_proc :: proc(eh: ^zd.Eh, msg: zd.Message, inst: ^Concat_Instance_Data) {
 }
 
 ////
-ohmjs0_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("ohmjs0 (ID:%d)", counter)
-    return zd.make_leaf (name_with_id, ohmjs0_proc)
-}
-
-ohmjs0_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    switch (msg.port) {
-    case "args":
-	fmt.printf ("ohmjs0 gets grammar: %v\n", msg.datum.(string))
-    case "stdin":
-	fmt.printf ("ohmjs0 gets stdin: %v\n", msg.datum.(string))
-    }
-}
-
-////
 
 vc_instantiate :: proc(name: string) -> ^zd.Eh {
     @(static) counter := 0
@@ -1023,7 +1005,7 @@ vcohm_instantiate :: proc(name: string) -> ^zd.Eh {
 }
 
 vcohm_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "prolog/virtualcomma.ohm")
+    zd.send(eh, "output", "rt/virtualcomma.ohm")
 }
 
 vcjs_instantiate :: proc(name: string) -> ^zd.Eh {
@@ -1035,7 +1017,7 @@ vcjs_instantiate :: proc(name: string) -> ^zd.Eh {
 }
 
 vcjs_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "prolog/virtualcomma.js")
+    zd.send(eh, "output", "rt/virtualcomma.sem.js")
 }
 
 OhmJS_Instance_Data :: struct {
@@ -1060,7 +1042,7 @@ ohmjs_maybe :: proc (eh: ^zd.Eh, inst: ^OhmJS_Instance_Data) {
         c := "pwd"
 	o, e := process.run_command (c, inst.input)
 
-        cmd := fmt.aprintf ("./ohmjs.js %s %s %s", inst.grammarname, inst.grammarfilename, inst.semanticsfilename)
+        cmd := fmt.aprintf ("ohmjs/ohmjs.js %s %s %s", inst.grammarname, inst.grammarfilename, inst.semanticsfilename)
 	captured_output, err := process.run_command (cmd, inst.input)
 	if err == "" {
             zd.send(eh, "output", captured_output)
@@ -1112,7 +1094,7 @@ rwrohm_instantiate :: proc(name: string) -> ^zd.Eh {
     return zd.make_leaf(name_with_id, rwrohm_proc)
 }
 rwrohm_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "rwr.ohm")
+    zd.send(eh, "output", "rwr/rwr.ohm")
 }
 rwrsemjs_instantiate :: proc(name: string) -> ^zd.Eh {
     @(static) counter := 0
@@ -1122,7 +1104,7 @@ rwrsemjs_instantiate :: proc(name: string) -> ^zd.Eh {
     return zd.make_leaf(name_with_id, rwrsemjs_proc)
 }
 rwrsemjs_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "rwr.sem.js")
+    zd.send(eh, "output", "rwr/rwr.sem.js")
 }
 
 ///
@@ -1144,7 +1126,7 @@ escapesohm_instantiate :: proc(name: string) -> ^zd.Eh {
     return zd.make_leaf(name_with_id, escapesohm_proc)
 }
 escapesohm_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "prolog/escapes.ohm")
+    zd.send(eh, "output", "rt/escapes.ohm")
 }
 escapesrwr_instantiate :: proc(name: string) -> ^zd.Eh {
     @(static) counter := 0
@@ -1154,7 +1136,7 @@ escapesrwr_instantiate :: proc(name: string) -> ^zd.Eh {
     return zd.make_leaf(name_with_id, escapesrwr_proc)
 }
 escapesrwr_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "prolog/escapes.rwr")
+    zd.send(eh, "output", "rt/escapes.rwr")
 }
 
 //
@@ -1206,208 +1188,6 @@ fakepipename_proc :: proc(eh: ^zd.Eh, msg: zd.Message, inst: ^Syncfilewrite_Data
 
 ///
 
-///
-unquote_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("unquote (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, unquote_proc)
-}
-unquote_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "Unquote")
-}
-unquoteohm_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("unquoteohm (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, unquoteohm_proc)
-}
-unquoteohm_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "prolog/unquote.ohm.m4")
-}
-unquoterwr_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("unquoterwr (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, unquoterwr_proc)
-}
-unquoterwr_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "prolog/unquote.rwr.m4")
-}
-///
-constants_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("constants (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, constants_proc)
-}
-constants_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "Constants")
-}
-constantsohm_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("constantsohm (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, constantsohm_proc)
-}
-constantsohm_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "prolog/constants.ohm.m4")
-}
-constantsrwr_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("constantsrwr (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, constantsrwr_proc)
-}
-constantsrwr_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "prolog/constants.rwr.m4")
-}
-
-///
-symrewrites_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("symrewrites (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, symrewrites_proc)
-}
-symrewrites_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "SymRewrites")
-}
-symrewritesohm_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("symrewritesohm (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, symrewritesohm_proc)
-}
-symrewritesohm_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "js/symrewrites.ohm.m4")
-}
-symrewritesrwr_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("symrewritesrwr (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, symrewritesrwr_proc)
-}
-symrewritesrwr_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "js/symrewrites.rwr.m4")
-}
-
-///
-listrewrites_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("listrewrites (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, listrewrites_proc)
-}
-listrewrites_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "ListRewrites")
-}
-listrewritesohm_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("listrewritesohm (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, listrewritesohm_proc)
-}
-listrewritesohm_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "js/listrewrites.ohm.m4")
-}
-listrewritesrwr_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("listrewritesrwr (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, listrewritesrwr_proc)
-}
-listrewritesrwr_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "js/listrewrites.rwr.m4")
-}
-
-///
-macro_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("macro (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, macro_proc)
-}
-macro_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "JSMacro")
-}
-macroohm_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("macroohm (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, macroohm_proc)
-}
-macroohm_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "js/macro.ohm.m4")
-}
-macrorwr_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("macrorwr (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, macrorwr_proc)
-}
-macrorwr_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "prolosjs/macro.rwr.m4")
-}
-
-///
-exprstatements_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("exprstatements (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, exprstatements_proc)
-}
-exprstatements_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "ExprStatements")
-}
-exprstatementsohm_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("exprstatementsohm (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, exprstatementsohm_proc)
-}
-exprstatementsohm_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "js/exprstatements.ohm.m4")
-}
-exprstatementsrwr_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("exprstatementsrwr (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, exprstatementsrwr_proc)
-}
-exprstatementsrwr_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "js/exprstatements.rwr.m4")
-}
-exprstatementssupport_instantiate :: proc(name: string) -> ^zd.Eh {
-    @(static) counter := 0
-    counter += 1
-
-    name_with_id := fmt.aprintf("exprstatementssupport (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, exprstatementssupport_proc)
-}
-exprstatementssupport_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "js/exprstatementssupport.js")
-}
-
-///
 
 colonspc_instantiate :: proc(name: string) -> ^zd.Eh {
     @(static) counter := 0
