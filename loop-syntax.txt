@@ -2,6 +2,6 @@
 loop over operands -> operand {
     termination: operands empty;
     iteration: 
-      do-something1-with (operand);
-      do-something2-with (operand);
+      do-something1-with (operand); // this is yet another comment
+      do-something2-with (operand, "this is a string containing spaces");
   }

@@ -3,14 +3,17 @@ Word {
   item =
     | space -- space
     | separator -- separator
+    | string -- string
     | word -- word
 
   word = legalchar+
   legalchar = ~separator ~space any
 
-  separator = "(" | ")" | "//" | higherLevelSeparator
+  separator = "(" | ")" | "//" | extraSeparator
   comment = "//" (~"\n" any)* "\n"
   space += comment
+  string = dq (~dq any)* dq
+  dq = "\""
 
-  higherLevelSeparator = ";" | ":" | "{" | "}" | "->"
+  extraSeparator = ";" | ":" | "{" | "}" | "->" | ","
 }
