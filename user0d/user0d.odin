@@ -34,9 +34,9 @@ components :: proc (leaves: ^[dynamic]reg.Leaf_Initializer) {
     append(leaves, reg.Leaf_Instantiator { name = "concat", init = leaf.concat_instantiate })
 
     // for front end
-    append(leaves, reg.Leaf_Instantiator { name = "'VirtualComma'", init = leaf.vc_instantiate })
-    append(leaves, reg.Leaf_Instantiator { name = "'rt/virtualcomma.ohm'", init = leaf.vcohm_instantiate })
-    append(leaves, reg.Leaf_Instantiator { name = "'rt/virtualcomma.sem.js'", init = leaf.vcjs_instantiate })
+    append(leaves, reg.Leaf_Instantiator { name = "'Word'", init = leaf.word_instantiate })
+    append(leaves, reg.Leaf_Instantiator { name = "'rt/word.ohm'", init = leaf.wordohm_instantiate })
+    append(leaves, reg.Leaf_Instantiator { name = "'rt/word.sem.js'", init = leaf.wordjs_instantiate })
     append(leaves, reg.Leaf_Instantiator { name = "OhmJS", init = leaf.ohmjs_instantiate })
 
     append(leaves, reg.Leaf_Instantiator { name = "'RWR'", init = leaf.rwr_instantiate })

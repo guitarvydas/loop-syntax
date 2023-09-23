@@ -983,41 +983,41 @@ concat_proc :: proc(eh: ^zd.Eh, msg: zd.Message, inst: ^Concat_Instance_Data) {
 
 ////
 
-vc_instantiate :: proc(name: string) -> ^zd.Eh {
+word_instantiate :: proc(name: string) -> ^zd.Eh {
     @(static) counter := 0
     counter += 1
 
-    name_with_id := fmt.aprintf("vc (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, vc_proc)
+    name_with_id := fmt.aprintf("word (ID:%d)", counter)
+    return zd.make_leaf(name_with_id, word_proc)
 }
 
-vc_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "VirtualComma")
+word_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
+    zd.send(eh, "output", "Word")
 }
 
 
-vcohm_instantiate :: proc(name: string) -> ^zd.Eh {
+wordohm_instantiate :: proc(name: string) -> ^zd.Eh {
     @(static) counter := 0
     counter += 1
 
-    name_with_id := fmt.aprintf("vcohm (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, vcohm_proc)
+    name_with_id := fmt.aprintf("word (ID:%d)", counter)
+    return zd.make_leaf(name_with_id, wordohm_proc)
 }
 
-vcohm_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "rt/virtualcomma.ohm")
+wordohm_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
+    zd.send(eh, "output", "rt/word.ohm")
 }
 
-vcjs_instantiate :: proc(name: string) -> ^zd.Eh {
+wordjs_instantiate :: proc(name: string) -> ^zd.Eh {
     @(static) counter := 0
     counter += 1
 
-    name_with_id := fmt.aprintf("vcjs (ID:%d)", counter)
-    return zd.make_leaf(name_with_id, vcjs_proc)
+    name_with_id := fmt.aprintf("wordjs (ID:%d)", counter)
+    return zd.make_leaf(name_with_id, wordjs_proc)
 }
 
-vcjs_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
-    zd.send(eh, "output", "rt/virtualcomma.sem.js")
+wordjs_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {
+    zd.send(eh, "output", "rt/word.sem.js")
 }
 
 OhmJS_Instance_Data :: struct {
@@ -1080,7 +1080,7 @@ rwr_instantiate :: proc(name: string) -> ^zd.Eh {
     @(static) counter := 0
     counter += 1
 
-    name_with_id := fmt.aprintf("vc (ID:%d)", counter)
+    name_with_id := fmt.aprintf("rwr (ID:%d)", counter)
     return zd.make_leaf(name_with_id, rwr_proc)
 }
 rwr_proc :: proc(eh: ^zd.Eh, msg: zd.Message) {

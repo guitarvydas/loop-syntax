@@ -1,0 +1,16 @@
+Word {
+  input = item+
+  item =
+    | space -- space
+    | separator -- separator
+    | word -- word
+
+  word = legalchar+
+  legalchar = ~separator ~space any
+
+  separator = "(" | ")" | "//" | higherLevelSeparator
+  comment = "//" (~"\n" any)* "\n"
+  space += comment
+
+  higherLevelSeparator = ";" | ":" | "{" | "}" | "->"
+}
